@@ -26,6 +26,9 @@ if ($result === false) {
 // Convert into a short array.
 $codes = short_array_string($codes);
 
+$names = list_names();
+$names = short_array_string($names);
+
 $englishNames = list_english_names();
 $englishNames = short_array_string($englishNames);
 
@@ -34,6 +37,7 @@ $englishInvertedNames = short_array_string($englishInvertedNames);
 
 $replace = [
     '__CODES__' => $codes,
+    '__NAMES__' => $names,
     '__ENGLISH_NAMES__' => $englishNames,
     '__ENGLISH_INVERTED_NAMES__' => $englishInvertedNames,
 ];
@@ -62,6 +66,11 @@ function list_codes()
     natsort($result);
 
     return $result;
+}
+
+function list_names()
+{
+    return fetch_wikipedia_list();
 }
 
 function list_english_names()
@@ -105,7 +114,7 @@ function fetch_iso639($source)
     static $data;
 
     if (!isset($data[$source])) {
-        $content  = file_get_contents($source) ?: [];
+        $content  = file_get_contents($source) ?: '';
 
         // Clean the table and convert it into an array..
         $content = str_replace(["\r\n", "\n\r", "\r"], ["\n", "\n", "\n"], $content);
@@ -115,6 +124,50 @@ function fetch_iso639($source)
 
         // Remove the headers.
         unset($data[$source][0]);
+    }
+
+    return $data[$source];
+}
+
+function fetch_wikipedia_list()
+{
+    static $data;
+
+    $source = 'https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes';
+    if (!isset($data[$source])) {
+        $list = [];
+
+        $html = file_get_contents($source) ?: '';
+        libxml_use_internal_errors(true);
+        $htmlDom = new \DOMDocument();
+        $htmlDom->loadHTML($html);
+        $xpath = new \DOMXPath($htmlDom);
+
+        // Query for the three letters codes and the native name.
+        $query = '//table[@id="iso-codes"]/tbody/tr';
+        $queryCode = './td[1]/span[1]/a[1]/text()';
+        $queryNative = './td[8]//text()';
+
+        $rows = $xpath->query($query);
+        if ($rows->length) {
+            foreach ($rows as $row) {
+                $codeCell = $xpath->query($queryCode, $row);
+                if (!$codeCell->length) {
+                    continue;
+                }
+
+                $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
+                $nativeCell = $xpath->query($queryNative, $row);
+                $native = $nativeCell->length
+                    ? trim(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','))
+                    : '';
+                $list[$code] = $native;
+            }
+
+            ksort($list);
+        }
+
+        $data[$source] = $list;
     }
 
     return $data[$source];

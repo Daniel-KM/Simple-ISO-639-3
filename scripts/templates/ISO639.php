@@ -11,6 +11,8 @@ class ISO639
 {
     const CODES = __CODES__;
 
+    const NAMES = __NAMES__;
+
     const ENGLISH_NAMES = __ENGLISH_NAMES__;
 
     const ENGLISH_INVERTED_NAMES = __ENGLISH_INVERTED_NAMES__;
@@ -31,9 +33,10 @@ class ISO639
             return self::CODES[$lang];
         }
 
-        return array_search($language, self::ENGLISH_NAME)
-            ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
-                ?: '');
+        return array_search($language, self::NAME)
+            ?: (array_search($language, self::ENGLISH_NAME)
+                ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
+                    ?: ''));
     }
 
     /**
@@ -62,6 +65,21 @@ class ISO639
         $code = self::code($language);
         return $code
             ? array_search($code, self::CODES)
+            : '';
+    }
+
+    /**
+     * Get the native language name from a language string, if available.
+     *
+     * @uses self::code()
+     * @param string $language
+     * @return string If language doesn't exist, an empty string is returned.
+     */
+    static function name($language)
+    {
+        $lang = self::code($language);
+        return $lang
+            ? self::NAMES[$lang]
             : '';
     }
 
