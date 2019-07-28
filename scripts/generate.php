@@ -63,14 +63,16 @@ function list_codes()
     }
 
     unset($result['']);
-    natsort($result);
+    ksort($result);
 
     return $result;
 }
 
 function list_names()
 {
-    return fetch_wikipedia_list();
+    $result = fetch_wikipedia_list();
+    ksort($result);
+    return $result;
 }
 
 function list_english_names()
@@ -81,6 +83,8 @@ function list_english_names()
     foreach ($data as $language) {
         $result[$language[0]] = $language[6];
     }
+
+    ksort($result);
 
     return $result;
 }
@@ -93,6 +97,8 @@ function list_english_inverted_names()
     foreach ($data as $language) {
         $result[$language[0]] = $language[2];
     }
+
+    ksort($result);
 
     return $result;
 }
@@ -159,7 +165,7 @@ function fetch_wikipedia_list()
                 $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
                 $nativeCell = $xpath->query($queryNative, $row);
                 $native = $nativeCell->length
-                    ? trim(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','))
+                    ? trim(strtok(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
                     : '';
                 $list[$code] = $native;
             }
