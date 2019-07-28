@@ -39,6 +39,9 @@ $languages = [
 $result = [];
 foreach ($languages as $language) {
     $result[$language] = SimpleISO639::code($language);
+        'code' => SimpleISO639::code($language),
+        'english' => SimpleISO639::englishName($language),
+    ];
 }
 print_r($result);
 

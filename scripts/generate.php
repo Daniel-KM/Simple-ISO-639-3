@@ -38,6 +38,8 @@ class ISO639
 {
     const CODES = __CODES__;
 
+    const ENGLISH_NAMES = __ENGLISH_NAMES__;
+
     /**
      * Get a normalized three letters language from a two-letters one, or
      * language and country, or from an IETF RFC 4646 language tag.
@@ -63,15 +65,46 @@ class ISO639
     {
         return self::CODES;
     }
+
+    /**
+     * Get the language name in English from a language code.
+     *
+     * @param string $language
+     * @return string If language doesn't exist, an empty string is returned.
+     */
+    static function englishName($language)
+    {
+        $lang = self::code($language);
+        return $lang
+            ? self::ENGLISH_NAMES[$lang]
+            : '';
+    }
+
+    /**
+     * Get all standard languages English names by three letters abbreviations.
+     *
+     * @return array
+     */
+    static function englishNames()
+    {
+        return self::ENGLISH_NAMES;
+    }
 }
 
 PHP;
 
 // Convert into a short array.
-$codes = str_replace(['array (', ')'], ['[', '    ]'], var_export($codes, true));
-$codes = preg_replace("~^(  '.*)$~m", '      $1', $codes);
+$codes = short_array_string($codes);
 
-$content = str_replace('__CODES__', $codes, $content);
+$englishNames = list_english_names();
+$englishNames = short_array_string($englishNames);
+
+$replace = [
+    '__CODES__' => $codes,
+    '__ENGLISH_NAMES__' => $englishNames,
+];
+
+$content = str_replace(array_keys($replace), array_values($replace), $content);
 
 file_put_contents($destination, $content);
 
@@ -97,6 +130,18 @@ function list_codes()
     return $result;
 }
 
+function list_english_names()
+{
+    $result = [];
+    $data = fetch_iso639();
+
+    foreach ($data as $language) {
+        $result[$language[0]] = $language[6];
+    }
+
+    return $result;
+}
+
 function fetch_iso639()
 {
     static $data;
@@ -117,4 +162,17 @@ function fetch_iso639()
     }
 
     return $data;
+}
+
+/**
+ * Use a short array for output.
+ *
+ * @param array $array
+ * @return string
+ */
+function short_array_string($array)
+{
+    $arrayString = var_export($array, true);
+    $arrayString = str_replace(['array (', ')'], ['[', '    ]'], $arrayString);
+    return preg_replace("~^(  '.*)$~m", '      $1', $arrayString);
 }
