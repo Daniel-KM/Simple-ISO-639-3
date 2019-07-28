@@ -35,12 +35,14 @@ $languages = [
     'fro',
     'fr_FR',
     'fr-FR',
+    'French',
 ];
 $result = [];
 foreach ($languages as $language) {
     $result[$language] = SimpleISO639::code($language);
         'code' => SimpleISO639::code($language),
         'english' => SimpleISO639::englishName($language),
+        'code (short)' => SimpleISO639::code2letters($language),
     ];
 }
 print_r($result);
