@@ -1,0 +1,17 @@
+{
+    "name": "daniel-km/simple-iso-639",
+    "description": "Convert two and three letters language codes and names from official standard sources.",
+    "type": "library",
+    "license": "CeCILL-21",
+    "authors": [
+        {
+            "name": "Daniel Berthereau",
+            "email": "daniel.packagist@berthereau.net"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "require-dev": {
+        "slowprog/composer-copy-file": "^0.3.1"
+    }
+}
