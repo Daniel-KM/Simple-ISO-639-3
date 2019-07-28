@@ -201,6 +201,6 @@ function fetch_wikipedia_list()
 function short_array_string($array)
 {
     $arrayString = var_export($array, true);
-    $arrayString = str_replace(['array (', ')'], ['[', '    ]'], $arrayString);
-    return preg_replace("~^(  '.*)$~m", '      $1', $arrayString);
+    $arrayString = str_replace(['array (', ')', ' => '], ['[', ']', '=>'], $arrayString);
+    return preg_replace("~^\s*('.*)$~m", '$1', $arrayString);
 }

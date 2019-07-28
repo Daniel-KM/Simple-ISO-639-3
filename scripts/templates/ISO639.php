@@ -9,6 +9,8 @@
  */
 class ISO639
 {
+    // Constants are not indented for smaller file.
+
     const CODES = __CODES__;
 
     const NAMES = __NAMES__;
