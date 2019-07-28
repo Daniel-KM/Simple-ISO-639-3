@@ -35,8 +35,8 @@ class ISO639
             return self::CODES[$lang];
         }
 
-        return array_search($language, self::NAME)
-            ?: (array_search($language, self::ENGLISH_NAME)
+        return array_search($language, self::NAMES)
+            ?: (array_search($language, self::ENGLISH_NAMES)
                 ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
                     ?: ''));
     }
