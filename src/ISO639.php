@@ -15962,16 +15962,6 @@ class ISO639
     }
 
     /**
-     * Get all standard languages by two or three letters abbreviations.
-     *
-     * @return array
-     */
-    static function codes()
-    {
-        return self::CODES;
-    }
-
-    /**
      * Get the language name in English from a language code.
      *
      * @param string $language
@@ -15983,6 +15973,16 @@ class ISO639
         return $lang
             ? self::ENGLISH_NAMES[$lang]
             : '';
+    }
+
+    /**
+     * Get all standard languages by two or three letters abbreviations.
+     *
+     * @return array
+     */
+    static function codes()
+    {
+        return self::CODES;
     }
 
     /**
