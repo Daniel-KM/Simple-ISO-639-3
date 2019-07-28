@@ -15947,7 +15947,8 @@ class ISO639
 
     /**
      * Get a normalized three letters language from a two-letters one, or
-     * language and country, or from an IETF RFC 4646 language tag.
+     * language and country, or from an IETF RFC 4646 language tag, or from the
+     * English normalized name.
      *
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
@@ -15956,9 +15957,11 @@ class ISO639
     {
         // The check is done on "-" too to allow RFC4646 formatted locale.
         $lang = strtolower(strtok(strtok($language, '_'), '-'));
-        return isset(self::CODES[$lang])
-            ? self::CODES[$lang]
-            : '';
+        if (isset(self::CODES[$lang])) {
+            return self::CODES[$lang];
+        }
+
+        return array_search($language, self::ENGLISH_NAMES) ?: '';
     }
 
     /**
