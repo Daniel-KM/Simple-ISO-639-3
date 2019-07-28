@@ -1,11 +1,14 @@
-
 <?php
 require_once '/var/www/html/outils/debug.php';
 
 /**
- * Prepare lists of languages from standard sources
+ * Prepare lists of languages from standard sources.
  *
- * @url .
+ * Some native names and other codes can be added via the file "extra codes".
+ * Only the main native is managed.
+ *
+ * @url https://iso639-3.sil.org
+ * @url https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  */
 
 echo 'Preparation of the languages…' . "\n";
@@ -61,8 +64,10 @@ function list_codes()
         $result[$language[2]] = $language[0];
         $result[$language[3]] = $language[0];
     }
-
     unset($result['']);
+
+    $extra = require __DIR__ . '/extra_codes.php';
+    $result += $extra['CODES'];
     ksort($result);
 
     return $result;
@@ -71,7 +76,11 @@ function list_codes()
 function list_names()
 {
     $result = fetch_wikipedia_list();
+
+    $extra = require __DIR__ . '/extra_codes.php';
+    $result += $extra['NAMES'];
     ksort($result);
+
     return $result;
 }
 
@@ -84,6 +93,8 @@ function list_english_names()
         $result[$language[0]] = $language[6];
     }
 
+    $extra = require __DIR__ . '/extra_codes.php';
+    $result += $extra['ENGLISH_NAMES'];
     ksort($result);
 
     return $result;
@@ -98,6 +109,8 @@ function list_english_inverted_names()
         $result[$language[0]] = $language[2];
     }
 
+    $extra = require __DIR__ . '/extra_codes.php';
+    $result += $extra['ENGLISH_INVERTED_NAMES'];
     ksort($result);
 
     return $result;
