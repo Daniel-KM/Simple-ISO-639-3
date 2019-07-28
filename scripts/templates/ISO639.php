@@ -13,10 +13,12 @@ class ISO639
 
     const ENGLISH_NAMES = __ENGLISH_NAMES__;
 
+    const ENGLISH_INVERTED_NAMES = __ENGLISH_INVERTED_NAMES__;
+
     /**
-     * Get a normalized three letters language from a two or three letters one,
-     * or language and country, or from an IETF RFC 4646 language tag, or from
-     * the English normalized name.
+     * Get a normalized three letters language code from a two or three letters
+     * one, or language and country, or from an IETF RFC 4646 language tag, or
+     * from the English normalized name, raw or inverted.
      *
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
@@ -29,7 +31,9 @@ class ISO639
             return self::CODES[$lang];
         }
 
-        return array_search($language, self::ENGLISH_NAMES) ?: '';
+        return array_search($language, self::ENGLISH_NAME)
+            ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
+                ?: '');
     }
 
     /**
@@ -45,9 +49,9 @@ class ISO639
     }
 
     /**
-     * Get a normalized two letters language from a two or three-letters one, or
-     * language and country, or from an IETF RFC 4646 language tag, or from the
-     * English normalized name.
+     * Get a normalized two letters language code from a two or three-letters
+     * one, or language and country, or from an IETF RFC 4646 language tag, or
+     * from the English normalized name, raw or inverted.
      *
      * @uses self::code()
      * @param string $language
@@ -62,7 +66,7 @@ class ISO639
     }
 
     /**
-     * Get the language name in English from a language code.
+     * Get the language name in English from a language string.
      *
      * @uses self::code()
      * @param string $language
@@ -73,6 +77,24 @@ class ISO639
         $lang = self::code($language);
         return $lang
             ? self::ENGLISH_NAMES[$lang]
+            : '';
+    }
+
+    /**
+     * Get the language inverted name in English from a language string.
+     *
+     * The inverted language is used to simplify listing (ordered by root
+     * language).
+     *
+     * @uses self::code()
+     * @param string $language
+     * @return string If language doesn't exist, an empty string is returned.
+     */
+    static function englishInvertedName($language)
+    {
+        $lang = self::code($language);
+        return $lang
+            ? self::ENGLISH_INVERTED_NAMES[$lang]
             : '';
     }
 }

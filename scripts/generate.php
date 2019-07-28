@@ -29,9 +29,13 @@ $codes = short_array_string($codes);
 $englishNames = list_english_names();
 $englishNames = short_array_string($englishNames);
 
+$englishInvertedNames = list_english_inverted_names();
+$englishInvertedNames = short_array_string($englishInvertedNames);
+
 $replace = [
     '__CODES__' => $codes,
     '__ENGLISH_NAMES__' => $englishNames,
+    '__ENGLISH_INVERTED_NAMES__' => $englishInvertedNames,
 ];
 
 $content = file_get_contents(__DIR__ . '/templates/ISO639.php');
@@ -45,7 +49,7 @@ exit;
 function list_codes()
 {
     $result = [];
-    $data = fetch_iso639();
+    $data = fetch_iso639_3();
 
     foreach ($data as $language) {
         $result[$language[0]] = $language[0];
@@ -63,7 +67,7 @@ function list_codes()
 function list_english_names()
 {
     $result = [];
-    $data = fetch_iso639();
+    $data = fetch_iso639_3();
 
     foreach ($data as $language) {
         $result[$language[0]] = $language[6];
@@ -72,26 +76,48 @@ function list_english_names()
     return $result;
 }
 
-function fetch_iso639()
+function list_english_inverted_names()
+{
+    $result = [];
+    $data = fetch_iso639_3_inverted();
+
+    foreach ($data as $language) {
+        $result[$language[0]] = $language[2];
+    }
+
+    return $result;
+}
+
+function fetch_iso639_3()
+{
+    // Headers are: Id, Part2B, Part2T, Part1, Scope, Language_Type, Ref_Name, Comment
+    return fetch_iso639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab');
+}
+
+function fetch_iso639_3_inverted()
+{
+    // Headers are: Id, Print_Name, Inverted_Name
+    return fetch_iso639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3_Name_Index.tab');
+}
+
+function fetch_iso639($source)
 {
     static $data;
 
-    if (is_null($data)) {
-        $source = 'https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab';
+    if (!isset($data[$source])) {
         $content  = file_get_contents($source) ?: [];
 
         // Clean the table and convert it into an array..
         $content = str_replace(["\r\n", "\n\r", "\r"], ["\n", "\n", "\n"], $content);
-        $data = array_map(function ($v) {
+        $data[$source] = array_map(function ($v) {
             return str_getcsv($v, "\t");
         }, explode("\n", $content));
 
-        // Headers are: Id, Part2B, Part2T, Part1, Scope, Language_Type, Ref_Name, Comment
         // Remove the headers.
-        unset($data[0]);
+        unset($data[$source][0]);
     }
 
-    return $data;
+    return $data[$source];
 }
 
 /**
