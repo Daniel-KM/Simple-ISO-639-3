@@ -1,10 +1,10 @@
 Simple ISO 639
-=============
+==============
 
 [Simple ISO 639] is a small library to convert languages codes between ISO 639-1
 (two letters language codes) and ISO 639-2 (three letters). It is built from the
-official standard lists ([SIL]) and is compatible with IETF language tags
-([RFC 4646]).
+official standard lists ISO 639-3 of ([SIL]) and is compatible with IETF
+language tags ([RFC 4646]).
 
 Note: The current standard (2007) uses the native language as a base for the
 codes. For example, three letters code for `French` is `fra`, not `fre`, or, for
@@ -24,7 +24,7 @@ composer require daniel-km/simple-iso639
 Usage
 -----
 
-Once included in your code, you can use if like that:
+Once included in your code, you can use it like that:
 
 ```
 $languages = [
@@ -39,14 +39,77 @@ $languages = [
 ];
 $result = [];
 foreach ($languages as $language) {
-    $result[$language] = SimpleISO639::code($language);
-        'code' => SimpleISO639::code($language),
-        'english' => SimpleISO639::englishName($language),
-        'code (short)' => SimpleISO639::code2letters($language),
+    $result[$language] = [
+        'code'          => \ISO639::code($language),
+        'native name'   => \ISO639::name($language),
+        'English name'  => \ISO639::englishName($language),
+        'inverted name' => \ISO639::englishInvertedName($language),
+        'short code'    => \ISO639::code2letters($language),
     ];
 }
-print_r($result);
+var_export($result);
+```
 
+Result:
+```
+[
+    'fr' => [
+        'code'          => 'fra',
+        'native name'   => 'français',
+        'English name'  => 'French',
+        'inverted name' => 'French',
+        'code (short)'  => 'fr',
+    ],
+    'fra' => [
+        'code'          => 'fra',
+        'native name'   => 'français',
+        'English name'  => 'French',
+        'inverted name' => 'French',
+        'code (short)'  => 'fr',
+    ],
+    'fre' => [
+        'code'          => 'fra',
+        'native name'   => 'français',
+        'English name'  => 'French',
+        'inverted name' => 'French',
+        'code (short)'  => 'fr',
+    ],
+    'frm' => [
+        'code'          => 'frm',
+        'native name'   => 'françois',
+        'English name'  => 'Middle French (ca. 1400-1600)',
+        'inverted name' => 'French, Middle (ca. 1400-1600)',
+        'code (short)'  => 'frm',
+    ],
+    'fro' => [
+        'code'          => 'fro',
+        'native name'   => 'Franceis',
+        'English name'  => 'Old French (842-ca. 1400)',
+        'inverted name' => 'French, Old (842-ca. 1400)',
+        'code (short)'  => 'fro',
+    ],
+    'fr_FR' => [
+        'code'          => 'fra',
+        'native name'   => 'français',
+        'English name'  => 'French',
+        'inverted name' => 'French',
+        'code (short)'  => 'fr',
+    ],
+    'fr-FR' => [
+        'code'          => 'fra',
+        'native name'   => 'français',
+        'English name'  => 'French',
+        'inverted name' => 'French',
+        'code (short)'  => 'fr',
+    ],
+    'French' => [
+        'code'          => 'fra',
+        'native name'   => 'français',
+        'English name'  => 'French',
+        'inverted name' => 'French',
+        'code (short)'  => 'fr',
+    ],
+]
 ```
 
 
