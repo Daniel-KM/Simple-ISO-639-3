@@ -15974,24 +15974,4 @@ class ISO639
             ? self::ENGLISH_NAMES[$lang]
             : '';
     }
-
-    /**
-     * Get all standard languages by two or three letters abbreviations.
-     *
-     * @return array
-     */
-    static function codes()
-    {
-        return self::CODES;
-    }
-
-    /**
-     * Get all standard languages English names by three letters abbreviations.
-     *
-     * @return array
-     */
-    static function englishNames()
-    {
-        return self::ENGLISH_NAMES;
-    }
 }
