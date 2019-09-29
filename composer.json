@@ -2,11 +2,20 @@
     "name": "daniel-km/simple-iso-639-3",
     "description": "Convert two and three letters language codes and names from official standard sources.",
     "type": "library",
-    "license": "CeCILL-21",
+    "license": "CECILL-2.1",
     "authors": [
         {
             "name": "Daniel Berthereau",
             "email": "daniel.packagist@berthereau.net"
         }
-    ]
+    ],
+    "keywords": [
+        "iso 639",
+        "language code"
+    ],
+    "support": {
+        "email": "daniel.support@berthereau.net",
+        "issues": "https://github.com/Daniel-KM/Simple-ISO-639-3/issues",
+        "source": "https://github.com/Daniel-KM/Simple-ISO-639-3"
+    }
 }
