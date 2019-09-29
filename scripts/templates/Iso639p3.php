@@ -35,7 +35,9 @@ class Iso639p3
     static function code($language)
     {
         // The check is done on "-" too to allow RFC4646 formatted locale.
-        $lang = strtolower(strtok(strtok($language, '_'), '-'));
+        $lang = function_exists('mb_strtolower')
+            ? mb_strtolower(strtok(strtok($language, '_'), '-'))
+            :  strtolower(strtok(strtok($language, '_'), '-'));
         if (isset(self::CODES[$lang])) {
             return self::CODES[$lang];
         }
@@ -45,6 +47,14 @@ class Iso639p3
                 ?: array_search($language, self::ENGLISH_INVERTED_NAMES));
         if ($code) {
             return $code;
+        }
+
+        if (function_exists('mb_strtolower')) {
+            $lower = mb_strtolower($language);
+            return array_search($lower, array_map('mb_strtolower', self::NAMES))
+                ?: (array_search($lower, array_map('mb_strtolower', self::ENGLISH_NAMES))
+                    ?: (array_search($lower, array_map('mb_strtolower', self::ENGLISH_INVERTED_NAMES))
+                        ?: ''));
         }
 
         $lower = strtolower($language);
