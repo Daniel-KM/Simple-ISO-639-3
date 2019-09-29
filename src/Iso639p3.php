@@ -4,10 +4,11 @@
  *
  * File created with command `scripts/generate.php`.
  *
- * @url https://www.loc.gov/standards/iso639-2/php/English_list.php
  * @url https://iso639-3.sil.org/code_tables/download_tables
+ * @url https://www.loc.gov/standards/iso639-2/php/English_list.php
+ * @url https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  */
-class ISO639
+class Iso639p3
 {
     // Constants are not indented for smaller file.
 

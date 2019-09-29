@@ -19,7 +19,7 @@ if (empty($codes)) {
     exit;
 }
 
-$destination = dirname(__DIR__) . '/src/ISO639.php';
+$destination = dirname(__DIR__) . '/src/Iso639p3.php';
 $result = file_put_contents($destination, '');
 if ($result === false) {
     echo 'Unable to create the file. Check your file system rights.' . "\n";
@@ -45,7 +45,7 @@ $replace = [
     '__ENGLISH_INVERTED_NAMES__' => $englishInvertedNames,
 ];
 
-$content = file_get_contents(__DIR__ . '/templates/ISO639.php');
+$content = file_get_contents(__DIR__ . '/templates/Iso639p3.php');
 $content = str_replace(array_keys($replace), array_values($replace), $content);
 file_put_contents($destination, $content);
 
