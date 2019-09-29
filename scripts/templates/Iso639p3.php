@@ -67,8 +67,27 @@ class Iso639p3
     {
         $code = self::code($language);
         return $code
+            // The first code is always the two-letters one, if any.
             ? array_search($code, self::CODES)
             : '';
+    }
+
+    /**
+     * Get all variant codes of a language (generally only one, except some
+     * languages).
+     *
+     * Examples: fr_FR => [fr, fra, fre]; or Français => [fr, fra, fre].
+     *
+     * @uses self::code()
+     * @param string $language
+     * @return array
+     */
+    static function codes($language)
+    {
+        $code = self::code($language);
+        return $code
+            ? array_keys(self::CODES, $code)
+            : [];
     }
 
     /**
