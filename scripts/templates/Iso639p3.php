@@ -25,6 +25,10 @@ class Iso639p3
      * one, or language and country, or from an IETF RFC 4646 language tag, or
      * from the English normalized name, raw or inverted.
      *
+     * For performance in case of a full language, it is recommended to respect
+     * standard case (lowercase or uppercase first letter) according to the
+     * language.
+     *
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
      */
@@ -36,9 +40,17 @@ class Iso639p3
             return self::CODES[$lang];
         }
 
-        return array_search($language, self::NAMES)
+        $code = array_search($language, self::NAMES)
             ?: (array_search($language, self::ENGLISH_NAMES)
-                ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
+                ?: array_search($language, self::ENGLISH_INVERTED_NAMES));
+        if ($code) {
+            return $code;
+        }
+
+        $lower = strtolower($language);
+        return array_search($lower, array_map('strtolower', self::NAMES))
+            ?: (array_search($lower, array_map('strtolower', self::ENGLISH_NAMES))
+                ?: (array_search($lower, array_map('strtolower', self::ENGLISH_INVERTED_NAMES))
                     ?: ''));
     }
 
