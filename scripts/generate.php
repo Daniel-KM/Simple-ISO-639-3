@@ -1,6 +1,4 @@
-<?php
-require_once '/var/www/html/outils/debug.php';
-
+<?php declare(strict_types=1);
 /**
  * Prepare lists of languages from standard sources.
  *
@@ -133,7 +131,7 @@ function fetch_iso639($source)
     static $data;
 
     if (!isset($data[$source])) {
-        $content  = file_get_contents($source) ?: '';
+        $content = file_get_contents($source) ?: '';
 
         // Clean the table and convert it into an array..
         $content = str_replace(["\r\n", "\n\r", "\r"], ["\n", "\n", "\n"], $content);

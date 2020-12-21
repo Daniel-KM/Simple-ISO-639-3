@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Allow to add or fix any data from the official codes.
  *
@@ -16,4 +16,3 @@ return [
     'ENGLISH_INVERTED_NAMES' => [
     ],
 ];
-

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Automatically generated lists of languages from standard sources.
  *
@@ -24338,7 +24338,7 @@ class Iso639p3
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
      */
-    static function code($language)
+    public static function code($language)
     {
         // The check is done on "-" too to allow RFC4646 formatted locale.
         $lang = function_exists('mb_strtolower')
@@ -24377,7 +24377,7 @@ class Iso639p3
      * @param string $language
      * @return string
      */
-    static function code3letters($language)
+    public static function code3letters($language)
     {
         return self::code($language);
     }
@@ -24391,7 +24391,7 @@ class Iso639p3
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
      */
-    static function code2letters($language)
+    public static function code2letters($language)
     {
         $code = self::code($language);
         return $code
@@ -24410,7 +24410,7 @@ class Iso639p3
      * @param string $language
      * @return array
      */
-    static function codes($language)
+    public static function codes($language)
     {
         $code = self::code($language);
         return $code
@@ -24425,7 +24425,7 @@ class Iso639p3
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
      */
-    static function name($language)
+    public static function name($language)
     {
         $lang = self::code($language);
         return $lang
@@ -24440,7 +24440,7 @@ class Iso639p3
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
      */
-    static function englishName($language)
+    public static function englishName($language)
     {
         $lang = self::code($language);
         return $lang
@@ -24458,7 +24458,7 @@ class Iso639p3
      * @param string $language
      * @return string If language doesn't exist, an empty string is returned.
      */
-    static function englishInvertedName($language)
+    public static function englishInvertedName($language)
     {
         $lang = self::code($language);
         return $lang
