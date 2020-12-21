@@ -40,6 +40,7 @@ $languages = [
     'frAnÇaiS',
     'frm',
     'fro',
+    'fxxx',
 ];
 $result = [];
 foreach ($languages as $language) {
@@ -69,6 +70,7 @@ Result:
 | frAnÇaiS | fra  | fr    | fr, fra, fre | français | French                        | French                         |
 | frm      | frm  | frm   | frm          | françois | Middle French (ca. 1400-1600) | French, Middle (ca. 1400-1600) |
 | fro      | fro  | fro   | fro          | Franceis | Old French (842-ca. 1400)     | French, Old (842-ca. 1400)     |
+| fxxx     |      |       |              |          |                               |                                |
 
 
 Development
@@ -93,7 +95,7 @@ your archives regularly so you can roll back if needed.
 Troubleshooting
 ---------------
 
-See online issues on the [module issues] page on GitHub.
+See online issues on the [module issues] page on GitLab.
 
 
 License
@@ -101,7 +103,7 @@ License
 
 ### Module
 
-This module is published under the [CeCILL v2.1] licence, compatible with
+This module is published under the [CeCILL v2.1] license, compatible with
 [GNU/GPL] and approved by [FSF] and [OSI].
 
 This software is governed by the CeCILL license under French law and abiding by
@@ -133,17 +135,18 @@ Copyright
 
 * Copyright The Internet Society (2005) (RFC 4646)
 * Copyright http://www.iso639-3.sil.org (language codes)
-* Copyright Daniel Berthereau, 2019 (see [Daniel-KM] on GitHub)
+* Copyright Daniel Berthereau, 2019-2020 (see [Daniel-KM] on GitLab)
 
 
-[Simple ISO 639-3]: https://github.com/Daniel-KM/Simple-ISO-639-3
+[Simple ISO 639-3]: https://gitlab.com/Daniel-KM/Simple-ISO-639-3
 [SIL]: http://www.iso639-3.sil.org/
 [RFC 4646]: https://tools.ietf.org/html/rfc4646
-[Internationalisation]: https://github.com/Daniel-KM/Omeka-S-module-Internationalisation
+[Internationalisation]: https://gitlab.com/Daniel-KM/Omeka-S-module-Internationalisation
 [Omeka S]: https://omeka.org/s
-[issues]: https://github.com/Daniel-KM/Simple-ISO-639-3/issues
+[issues]: https://gitlab.com/Daniel-KM/Simple-ISO-639-3/-/issues
 [CeCILL v2.1]: https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 [GNU/GPL]: https://www.gnu.org/licenses/gpl-3.0.html
 [FSF]: https://www.fsf.org
 [OSI]: http://opensource.org
-[Daniel-KM]: https://github.com/Daniel-KM "Daniel Berthereau"
+[GitLab]: https://gitlab.com/Daniel-KM
+[Daniel-KM]: https://gitlab.com/Daniel-KM "Daniel Berthereau"

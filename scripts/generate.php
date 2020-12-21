@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 /**
  * Prepare lists of languages from standard sources.
  *
