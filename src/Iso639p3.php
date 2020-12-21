@@ -24340,6 +24340,8 @@ class Iso639p3
      */
     public static function code($language)
     {
+        $language = (string) $language;
+
         // The check is done on "-" too to allow RFC4646 formatted locale.
         $lang = function_exists('mb_strtolower')
             ? mb_strtolower(strtok(strtok($language, '_'), '-'))
