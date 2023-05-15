@@ -10,7 +10,11 @@ Note: The current standard (2007) uses the native language as a base for the
 codes. For example, three letters code for `French` is `fra`, not `fre`, or, for
 `Chinese`, `zho`, not `chi`. English language is deprecated.
 
-This library is used in the module [Internationalisation] for [Omeka S].
+This library is used in the module [Internationalisation] for [Omeka S] and some
+other places.
+
+The list of codes may be updated by [SIL], so some codes may be removed and some
+other ones may be added regularly.
 
 
 Installation
@@ -18,7 +22,7 @@ Installation
 
 This module is a composer library available on [packagist]:
 
-```
+```sh
 composer require daniel-km/simple-iso-639-3
 ```
 
@@ -78,7 +82,7 @@ Development
 
 The lists are automatically generated from this command:
 
-```
+```sh
 php -f scripts/generate.php
 ```
 
@@ -135,11 +139,11 @@ Copyright
 
 * Copyright The Internet Society (2005) (RFC 4646)
 * Copyright http://www.iso639-3.sil.org (language codes)
-* Copyright Daniel Berthereau, 2019-2020 (see [Daniel-KM] on GitLab)
+* Copyright Daniel Berthereau, 2019-2023 (see [Daniel-KM] on GitLab)
 
 
 [Simple ISO 639-3]: https://gitlab.com/Daniel-KM/Simple-ISO-639-3
-[SIL]: http://www.iso639-3.sil.org/
+[SIL]: https://iso639-3.sil.org
 [RFC 4646]: https://tools.ietf.org/html/rfc4646
 [Internationalisation]: https://gitlab.com/Daniel-KM/Omeka-S-module-Internationalisation
 [Omeka S]: https://omeka.org/s
