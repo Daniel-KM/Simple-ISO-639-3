@@ -8,8 +8,8 @@ return [
     'CODES' => [
     ],
     'NAMES' => [
-        'apy' => 'aparai',
-        'way' => 'wajana',
+        'apy' => 'Aparai',
+        'way' => 'Wajana',
     ],
     'ENGLISH_NAMES' => [
     ],

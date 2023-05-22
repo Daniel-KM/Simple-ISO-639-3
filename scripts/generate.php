@@ -6,8 +6,8 @@
  * Some native names and other codes can be added via the file "extra codes".
  * Only the main native is managed.
  *
- * @url https://iso639-3.sil.org
- * @url https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+ * @link https://iso639-3.sil.org
+ * @link https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  */
 
 echo 'Preparation of the languages…' . "\n";
@@ -55,12 +55,16 @@ exit;
 function list_codes()
 {
     $result = [];
-    $data = fetch_iso639_3();
+    $data = fetch_iso_639_3();
 
     foreach ($data as $language) {
+        // Code 3 letters.
         $result[$language[0]] = $language[0];
+        // Code 3 letters bis.
         $result[$language[1]] = $language[0];
+        // Code 3 letters ter.
         $result[$language[2]] = $language[0];
+        // Code 2 letters.
         $result[$language[3]] = $language[0];
     }
     unset($result['']);
@@ -86,7 +90,7 @@ function list_names()
 function list_english_names()
 {
     $result = [];
-    $data = fetch_iso639_3();
+    $data = fetch_iso_639_3();
 
     foreach ($data as $language) {
         $result[$language[0]] = $language[6];
@@ -102,7 +106,7 @@ function list_english_names()
 function list_english_inverted_names()
 {
     $result = [];
-    $data = fetch_iso639_3_inverted();
+    $data = fetch_iso_639_3_inverted();
 
     foreach ($data as $language) {
         $result[$language[0]] = $language[2];
@@ -115,13 +119,13 @@ function list_english_inverted_names()
     return $result;
 }
 
-function fetch_iso639_3()
+function fetch_iso_639_3()
 {
     // Headers are: Id, Part2B, Part2T, Part1, Scope, Language_Type, Ref_Name, Comment
     return fetch_iso639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab');
 }
 
-function fetch_iso639_3_inverted()
+function fetch_iso_639_3_inverted()
 {
     // Headers are: Id, Print_Name, Inverted_Name
     return fetch_iso639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3_Name_Index.tab');
@@ -200,6 +204,11 @@ function fetch_wikipedia_list()
 function short_array_string($array)
 {
     $arrayString = var_export($array, true);
-    $arrayString = str_replace(['array (', ')', ' => '], ['[', ']', '=>'], $arrayString);
+    $replace = [
+        'array (' => '[',
+        ' => ' => '=>',
+    ];
+    $arrayString = trim(str_replace(array_keys($replace), array_values($replace), $arrayString));
+    $arrayString = mb_substr($arrayString, 0, -1) . ']';
     return preg_replace("~^\s*('.*)$~m", '$1', $arrayString);
 }

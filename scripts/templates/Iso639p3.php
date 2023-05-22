@@ -4,9 +4,11 @@
  *
  * File created with command `scripts/generate.php`.
  *
- * @url https://iso639-3.sil.org/code_tables/download_tables
- * @url https://www.loc.gov/standards/iso639-2/php/English_list.php
- * @url https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+ * See daniel-km/simple-iso-3166-1
+ *
+ * @link https://iso639-3.sil.org/code_tables/download_tables
+ * @link https://www.loc.gov/standards/iso639-2/php/English_list.php
+ * @link https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  */
 class Iso639p3
 {
@@ -39,7 +41,7 @@ class Iso639p3
         // The check is done on "-" too to allow RFC4646 formatted locale.
         $lang = function_exists('mb_strtolower')
             ? mb_strtolower(strtok(strtok($language, '_'), '-'))
-            :  strtolower(strtok(strtok($language, '_'), '-'));
+            : strtolower(strtok(strtok($language, '_'), '-'));
         if (isset(self::CODES[$lang])) {
             return self::CODES[$lang];
         }
