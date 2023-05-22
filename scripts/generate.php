@@ -37,11 +37,15 @@ $englishNames = short_array_string($englishNames);
 $englishInvertedNames = list_english_inverted_names();
 $englishInvertedNames = short_array_string($englishInvertedNames);
 
+$frenchNames = list_french_names();
+$frenchNames = short_array_string($frenchNames);
+
 $replace = [
     '__CODES__' => $codes,
     '__NAMES__' => $names,
     '__ENGLISH_NAMES__' => $englishNames,
     '__ENGLISH_INVERTED_NAMES__' => $englishInvertedNames,
+    '__FRENCH_NAMES__' => $frenchNames,
 ];
 
 $content = file_get_contents(__DIR__ . '/templates/Iso639p3.php');
@@ -78,7 +82,7 @@ function list_codes()
 
 function list_names()
 {
-    $result = fetch_wikipedia_list();
+    $result = fetch_wikipedia_list_en();
 
     $extra = require __DIR__ . '/extra_codes.php';
     $result += $extra['NAMES'];
@@ -119,19 +123,30 @@ function list_english_inverted_names()
     return $result;
 }
 
+function list_french_names()
+{
+    $result = fetch_wikipedia_list_fr();
+
+    $extra = require __DIR__ . '/extra_codes.php';
+    $result += $extra['FRENCH_NAMES'];
+    ksort($result);
+
+    return $result;
+}
+
 function fetch_iso_639_3()
 {
     // Headers are: Id, Part2B, Part2T, Part1, Scope, Language_Type, Ref_Name, Comment
-    return fetch_iso639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab');
+    return fetch_iso_639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab');
 }
 
 function fetch_iso_639_3_inverted()
 {
     // Headers are: Id, Print_Name, Inverted_Name
-    return fetch_iso639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3_Name_Index.tab');
+    return fetch_iso_639('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3_Name_Index.tab');
 }
 
-function fetch_iso639($source)
+function fetch_iso_639($source)
 {
     static $data;
 
@@ -151,7 +166,7 @@ function fetch_iso639($source)
     return $data[$source];
 }
 
-function fetch_wikipedia_list()
+function fetch_wikipedia_list_en()
 {
     static $data;
 
@@ -171,7 +186,7 @@ function fetch_wikipedia_list()
         $queryNative = './td[8]//text()';
 
         $rows = $xpath->query($query);
-        if ($rows->length) {
+        if ($rows && $rows->length) {
             foreach ($rows as $row) {
                 $codeCell = $xpath->query($queryCode, $row);
                 if (!$codeCell->length) {
@@ -180,6 +195,51 @@ function fetch_wikipedia_list()
 
                 $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
                 $nativeCell = $xpath->query($queryNative, $row);
+                $native = $nativeCell->length
+                    ? trim(strtok(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
+                    : '';
+                $list[$code] = $native;
+            }
+
+            ksort($list);
+        }
+
+        $data[$source] = $list;
+    }
+
+    return $data[$source];
+}
+
+function fetch_wikipedia_list_fr()
+{
+    static $data;
+
+    $source = 'https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-2';
+    if (!isset($data[$source])) {
+        $list = [];
+
+        $html = file_get_contents($source) ?: '';
+        libxml_use_internal_errors(true);
+        $htmlDom = new \DOMDocument();
+        $htmlDom->loadHTML($html);
+        $htmlDom->loadXML($htmlDom->saveHTML());
+        $xpath = new \DOMXPath($htmlDom);
+
+        // Query for the three letters codes and the native name.
+        $query = '//table[contains(@class, "wikitable")]/tbody/tr';
+        $queryCode = './td[1]/text()';
+        $queryLocale = './td[4]//text()';
+
+        $rows = $xpath->query($query);
+        if ($rows && $rows->length) {
+            foreach ($rows as $row) {
+                $codeCell = $xpath->query($queryCode, $row);
+                if (!$codeCell->length) {
+                    continue;
+                }
+
+                $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
+                $nativeCell = $xpath->query($queryLocale, $row);
                 $native = $nativeCell->length
                     ? trim(strtok(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
                     : '';

@@ -22,6 +22,8 @@ class Iso639p3
 
     const ENGLISH_INVERTED_NAMES = __ENGLISH_INVERTED_NAMES__;
 
+    const FRENCH_NAMES = __FRENCH_NAMES__;
+
     /**
      * Get a normalized three letters language code from a two or three letters
      * one, or language and country, or from an IETF RFC 4646 language tag, or
@@ -48,7 +50,8 @@ class Iso639p3
 
         $code = array_search($language, self::NAMES)
             ?: (array_search($language, self::ENGLISH_NAMES)
-                ?: array_search($language, self::ENGLISH_INVERTED_NAMES));
+                ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
+                    ?: array_search($language, self::FRENCH_NAMES)));
         if ($code) {
             return $code;
         }
@@ -58,14 +61,16 @@ class Iso639p3
             return array_search($lower, array_map('mb_strtolower', self::NAMES))
                 ?: (array_search($lower, array_map('mb_strtolower', self::ENGLISH_NAMES))
                     ?: (array_search($lower, array_map('mb_strtolower', self::ENGLISH_INVERTED_NAMES))
-                        ?: ''));
+                        ?: (array_search($lower, array_map('mb_strtolower', self::FRENCH_NAMES))
+                            ?: '')));
         }
 
         $lower = strtolower($language);
         return array_search($lower, array_map('strtolower', self::NAMES))
             ?: (array_search($lower, array_map('strtolower', self::ENGLISH_NAMES))
                 ?: (array_search($lower, array_map('strtolower', self::ENGLISH_INVERTED_NAMES))
-                    ?: ''));
+                    ?: (array_search($lower, array_map('strtolower', self::FRENCH_NAMES))
+                        ?: '')));
     }
 
     /**
@@ -161,6 +166,21 @@ class Iso639p3
         $lang = self::code($language);
         return $lang
             ? self::ENGLISH_INVERTED_NAMES[$lang]
+            : '';
+    }
+
+    /**
+     * Get the language name in French from a language string.
+     *
+     * @uses self::code()
+     * @param string $language
+     * @return string If language doesn't exist, an empty string is returned.
+     */
+    public static function frenchName($language)
+    {
+        $lang = self::code($language);
+        return $lang
+            ? self::FRENCH_NAMES[$lang]
             : '';
     }
 }

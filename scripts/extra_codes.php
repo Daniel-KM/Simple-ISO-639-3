@@ -15,4 +15,8 @@ return [
     ],
     'ENGLISH_INVERTED_NAMES' => [
     ],
+    'FRENCH_NAMES' => [
+        'apy' => 'aparai',
+        'way' => 'wajana',
+    ],
 ];
