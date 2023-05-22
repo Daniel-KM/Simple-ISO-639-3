@@ -4,7 +4,8 @@ Simple ISO 639-3
 [Simple ISO 639-3] is a small library to convert languages codes between ISO 639-1
 (two letters language codes) and ISO 639-2 (three letters). It is built from the
 official standard lists ISO 639-3 of ([SIL]) and is compatible with IETF
-language tags ([RFC 4646]).
+language tags ([RFC 4646]). Languages names are available in native language,
+English and French.
 
 Note: The current standard (2007) uses the native language as a base for the
 codes. For example, three letters code for `French` is `fra`, not `fre`, or, for
@@ -30,7 +31,7 @@ composer require daniel-km/simple-iso-639-3
 Usage
 -----
 
-Once included in your code via composer or with `require_once 'path/to/vendor/daniel-km/simple-iso-639-3/src/ISO_639_3.php;'`,
+Once included in your code via composer or with `require_once 'path/to/vendor/daniel-km/simple-iso-639-3/src/Iso639p3.php;'`,
 you can use it like that:
 
 ```php
@@ -50,12 +51,14 @@ $result = [];
 foreach ($languages as $language) {
     $result[$language] = [
         'language'              => $language,
-        'code'                  => \Iso639p3::code($language),
-        'short'                 => \Iso639p3::code2letters($language),
-        'all'                   => \Iso639p3::codes($language),
-        'name'                  => \Iso639p3::name($language),
-        'English name'          => \Iso639p3::englishName($language),
-        'English inverted name' => \Iso639p3::englishInvertedName($language),
+        'code'                  => \Iso639p3\Iso639p3::code($language),
+        'short'                 => \Iso639p3\Iso639p3::code2letters($language),
+        'all'                   => \Iso639p3\Iso639p3::codes($language),
+        'name'                  => \Iso639p3\Iso639p3::name($language),
+        'English name'          => \Iso639p3\Iso639p3::englishName($language),
+        'English inverted name' => \Iso639p3\Iso639p3::englishInvertedName($language),
+        'French name'           => \Iso639p3\Iso639p3::frenchName($language),
+        'French inverted name'  => \Iso639p3\Iso639p3::frenchInvertedName($language),
     ];
 }
 print_r($result);
@@ -63,18 +66,18 @@ print_r($result);
 
 Result:
 
-| language | code | short | all          | name     | English name                  | English inverted name          |
-|----------|------|-------|--------------|----------|-------------------------------|--------------------------------|
-| fr       | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| fra      | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| fre      | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| fr_FR    | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| fr-FR    | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| French   | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| frAnÇaiS | fra  | fr    | fr, fra, fre | français | French                        | French                         |
-| frm      | frm  | frm   | frm          | françois | Middle French (ca. 1400-1600) | French, Middle (ca. 1400-1600) |
-| fro      | fro  | fro   | fro          | Franceis | Old French (842-ca. 1400)     | French, Old (842-ca. 1400)     |
-| fxxx     |      |       |              |          |                               |                                |
+| language | code | short | all          | name     | English name                  | English inverted name          | French name                   | French inverted name          |
+|----------|------|-------|--------------|----------|-------------------------------|--------------------------------|-------------------------------|-------------------------------|
+| fr       | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| fra      | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| fre      | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| fr_FR    | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| fr-FR    | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| French   | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| frAnÇaiS | fra  | fr    | fr, fra, fre | français | French                        | French                         | français                      | français                      |
+| frm      | frm  | frm   | frm          | françois | Middle French (ca. 1400-1600) | French, Middle (ca. 1400-1600) | moyen français (1400-1600)    | français moyen (1400-1600)    |
+| fro      | fro  | fro   | fro          | Franceis | Old French (842-ca. 1400)     | French, Old (842-ca. 1400)     | ancien français (842-ca.1400) | français ancien (842-ca.1400) |
+| fxxx     |      |       |              |          |                               |                                |                               |                               |
 
 
 Development
@@ -99,7 +102,7 @@ your archives regularly so you can roll back if needed.
 Troubleshooting
 ---------------
 
-See online issues on the [module issues] page on GitLab.
+See online [issues] page on GitLab.
 
 
 License
