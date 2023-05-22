@@ -19,9 +19,8 @@
         "source": "https://gitlab.com/Daniel-KM/Simple-ISO-639-3"
     },
     "autoload": {
-        "files": [
-            "src/Language.php",
-            "src/Iso639p3.php"
-        ]
+        "psr-4": {
+            "Iso639p3\\": "src"
+        }
     }
 }
