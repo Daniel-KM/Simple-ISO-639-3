@@ -17,5 +17,11 @@
         "email": "daniel.support@berthereau.net",
         "issues": "https://gitlab.com/Daniel-KM/Simple-ISO-639-3/-/issues",
         "source": "https://gitlab.com/Daniel-KM/Simple-ISO-639-3"
+    },
+    "autoload": {
+        "files": [
+            "src/Language.php",
+            "src/Iso639p3.php"
+        ]
     }
 }
