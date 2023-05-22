@@ -9,6 +9,7 @@
  * @link https://iso639-3.sil.org/code_tables/download_tables
  * @link https://www.loc.gov/standards/iso639-2/php/English_list.php
  * @link https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+ * @link https://www.loc.gov/standards/iso639-2/php/French_list.php
  */
 class Iso639p3
 {
@@ -23,6 +24,8 @@ class Iso639p3
     const ENGLISH_INVERTED_NAMES = __ENGLISH_INVERTED_NAMES__;
 
     const FRENCH_NAMES = __FRENCH_NAMES__;
+
+    const FRENCH_INVERTED_NAMES = __FRENCH_INVERTED_NAMES__;
 
     /**
      * Get a normalized three letters language code from a two or three letters
@@ -51,7 +54,8 @@ class Iso639p3
         $code = array_search($language, self::NAMES)
             ?: (array_search($language, self::ENGLISH_NAMES)
                 ?: (array_search($language, self::ENGLISH_INVERTED_NAMES)
-                    ?: array_search($language, self::FRENCH_NAMES)));
+                    ?: (array_search($language, self::FRENCH_NAMES)
+                        ?: array_search($language, self::FRENCH_INVERTED_NAMES))));
         if ($code) {
             return $code;
         }
@@ -62,7 +66,8 @@ class Iso639p3
                 ?: (array_search($lower, array_map('mb_strtolower', self::ENGLISH_NAMES))
                     ?: (array_search($lower, array_map('mb_strtolower', self::ENGLISH_INVERTED_NAMES))
                         ?: (array_search($lower, array_map('mb_strtolower', self::FRENCH_NAMES))
-                            ?: '')));
+                            ?: (array_search($lower, array_map('mb_strtolower', self::FRENCH_INVERTED_NAMES))
+                                ?: ''))));
         }
 
         $lower = strtolower($language);
@@ -70,7 +75,8 @@ class Iso639p3
             ?: (array_search($lower, array_map('strtolower', self::ENGLISH_NAMES))
                 ?: (array_search($lower, array_map('strtolower', self::ENGLISH_INVERTED_NAMES))
                     ?: (array_search($lower, array_map('strtolower', self::FRENCH_NAMES))
-                        ?: '')));
+                        ?: (array_search($lower, array_map('strtolower', self::FRENCH_INVERTED_NAMES))
+                            ?: ''))));
     }
 
     /**
@@ -181,6 +187,24 @@ class Iso639p3
         $lang = self::code($language);
         return $lang
             ? self::FRENCH_NAMES[$lang]
+            : '';
+    }
+
+    /**
+     * Get the language inverted name in French from a language string.
+     *
+     * The inverted language is used to simplify listing (ordered by root
+     * language).
+     *
+     * @uses self::code()
+     * @param string $language
+     * @return string If language doesn't exist, an empty string is returned.
+     */
+    public static function frenchInvertedName($language)
+    {
+        $lang = self::code($language);
+        return $lang
+            ? self::FRENCH_INVERTED_NAMES[$lang]
             : '';
     }
 }

@@ -8,6 +8,7 @@
  *
  * @link https://iso639-3.sil.org
  * @link https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+ * @link https://www.loc.gov/standards/iso639-2/php/French_list.php
  */
 
 echo 'Preparation of the languages…' . "\n";
@@ -40,12 +41,16 @@ $englishInvertedNames = short_array_string($englishInvertedNames);
 $frenchNames = list_french_names();
 $frenchNames = short_array_string($frenchNames);
 
+$frenchInvertedNames = list_french_inverted_names();
+$frenchInvertedNames = short_array_string($frenchInvertedNames);
+
 $replace = [
     '__CODES__' => $codes,
     '__NAMES__' => $names,
     '__ENGLISH_NAMES__' => $englishNames,
     '__ENGLISH_INVERTED_NAMES__' => $englishInvertedNames,
     '__FRENCH_NAMES__' => $frenchNames,
+    '__FRENCH_INVERTED_NAMES__' => $frenchInvertedNames,
 ];
 
 $content = file_get_contents(__DIR__ . '/templates/Iso639p3.php');
@@ -134,6 +139,17 @@ function list_french_names()
     return $result;
 }
 
+function list_french_inverted_names()
+{
+    $result = fetch_loc_fr();
+
+    $extra = require __DIR__ . '/extra_codes.php';
+    $result += $extra['FRENCH_INVERTED_NAMES'];
+    ksort($result);
+
+    return $result;
+}
+
 function fetch_iso_639_3()
 {
     // Headers are: Id, Part2B, Part2T, Part1, Scope, Language_Type, Ref_Name, Comment
@@ -194,11 +210,11 @@ function fetch_wikipedia_list_en()
                 }
 
                 $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
-                $nativeCell = $xpath->query($queryNative, $row);
-                $native = $nativeCell->length
-                    ? trim(strtok(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
+                $localeCell = $xpath->query($queryNative, $row);
+                $locale = $localeCell->length
+                    ? trim(strtok(strtok(strtok(strtok($localeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
                     : '';
-                $list[$code] = $native;
+                $list[$code] = $locale;
             }
 
             ksort($list);
@@ -222,7 +238,7 @@ function fetch_wikipedia_list_fr()
         libxml_use_internal_errors(true);
         $htmlDom = new \DOMDocument();
         $htmlDom->loadHTML($html);
-        $htmlDom->loadXML($htmlDom->saveHTML());
+        $htmlDom->loadXML($htmlDom->saveXML());
         $xpath = new \DOMXPath($htmlDom);
 
         // Query for the three letters codes and the native name.
@@ -239,11 +255,61 @@ function fetch_wikipedia_list_fr()
                 }
 
                 $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
-                $nativeCell = $xpath->query($queryLocale, $row);
-                $native = $nativeCell->length
-                    ? trim(strtok(strtok(strtok(strtok($nativeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
+                $localeCell = $xpath->query($queryLocale, $row);
+                $locale = $localeCell->length
+                    ? trim(strtok(strtok(strtok(strtok($localeCell->item(0)->nodeValue, ';'), '/'), ','), '('))
                     : '';
-                $list[$code] = $native;
+                $list[$code] = $locale;
+            }
+
+            ksort($list);
+        }
+
+        $data[$source] = $list;
+    }
+
+    return $data[$source];
+}
+
+function fetch_loc_fr()
+{
+    static $data;
+
+    $source = 'https://www.loc.gov/standards/iso639-2/php/French_list.php';
+    if (!isset($data[$source])) {
+        $list = [];
+
+        $html = file_get_contents($source) ?: '';
+        libxml_use_internal_errors(true);
+        $htmlDom = new \DOMDocument();
+        $htmlDom->loadHTML($html);
+        $htmlDom->loadXML($htmlDom->saveXML());
+        $xpath = new \DOMXPath($htmlDom);
+
+        // Query for the three letters codes and the native name.
+        $query = '//table//tr';
+        $queryCode = './td[4]/text()';
+        $queryLocale = './td[1]//text()';
+
+        $rows = $xpath->query($query);
+        if ($rows && $rows->length) {
+            $first = true;
+            foreach ($rows as $row) {
+                if ($first) {
+                    $first = false;
+                    continue;
+                }
+                $codeCell = $xpath->query($queryCode, $row);
+                if (!$codeCell->length) {
+                    continue;
+                }
+
+                $code = substr(trim($codeCell->item(0)->nodeValue), 0, 3);
+                $localeCell = $xpath->query($queryLocale, $row);
+                $locale = $localeCell->length
+                    ? $localeCell->item(0)->nodeValue
+                    : '';
+                $list[$code] = $locale;
             }
 
             ksort($list);
