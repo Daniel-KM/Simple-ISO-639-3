@@ -37,7 +37,7 @@ class Iso639p3
 
         // The check is done on "-" too to allow RFC4646 formatted locale.
         $hasMbFunctions = function_exists('mb_strtolower');
-        $lang = $hasMb
+        $lang = $hasMbFunctions
             ? mb_strtolower((string) strtok((string) strtok($language, '_'), '-'))
             : strtolower((string) strtok((string) strtok($language, '_'), '-'));
         if (isset(Language::CODES[$lang])) {
