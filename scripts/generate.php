@@ -54,7 +54,7 @@ $replace = [
 ];
 
 $content = file_get_contents(__DIR__ . '/templates/Language.php');
-$content = str_replace(array_keys($replace), array_values($replace), $content);
+$content = strtr($content, $replace);
 file_put_contents($destination, $content);
 
 echo 'Preparation of the languages file done.';
@@ -170,7 +170,7 @@ function fetch_iso_639($source)
         $content = file_get_contents($source) ?: '';
 
         // Clean the table and convert it into an array..
-        $content = str_replace(["\r\n", "\n\r", "\r"], ["\n", "\n", "\n"], $content);
+        $content = strtr($content, ["\r\n" => "\n", "\n\r" => "\n", "\r" => "\n"]);
         $data[$source] = array_map(function ($v) {
             return str_getcsv($v, "\t");
         }, explode("\n", $content));
@@ -334,7 +334,7 @@ function short_array_string($array)
         'array (' => '[',
         ' => ' => '=>',
     ];
-    $arrayString = trim(str_replace(array_keys($replace), array_values($replace), $arrayString));
+    $arrayString = trim(strtr($arrayString, $replace));
     $arrayString = mb_substr($arrayString, 0, -1) . ']';
     return preg_replace("~^\s*('.*)$~m", '$1', $arrayString);
 }
